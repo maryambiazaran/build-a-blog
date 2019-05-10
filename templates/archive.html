@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+<h2 id='archive-title' class='page-title'>Archive</h2>
 {% if posts %}
+    
     {% for post in posts %}
         <article class='blog-post'>
             <span class='post-title'> {{ post.title }} </span> 
@@ -10,7 +11,7 @@
             <div class='post-body'>
                 {{ post.body }}
             </div>
-            <form class = 'archive-toggle' acion='/' method='POST'>
+            <form class= 'archive-toggle' acion='/' method='POST'>
                 <input type='hidden' name = 'post-id' value = '{{ post.id }}' />
                 {% if post.active %}
                 <input type='submit' value='Archive' />
@@ -21,7 +22,7 @@
         </article>
     {% endfor %}
 {% else %}
-    <p> There are no posts here yet. Come back later. </p>
+    <p> There are no posts here. </p>
 {% endif %}
 
 {% endblock %}
