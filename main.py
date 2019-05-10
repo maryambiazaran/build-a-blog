@@ -41,11 +41,10 @@ def new_post():
         title = request.form['title']
         body = request.form['body']
         if title and body:
-            new_post = Blog(title)
-            new_post.body = body
+            new_post = Blog(title,body)
+            new_post.post_date = datetime.now()
             db.session.add(new_post)
             db.session.commit()
-            print(new_post)
             flash('Your new blog is published.')
             return render_template('index.html',posts=[new_post])
         else:

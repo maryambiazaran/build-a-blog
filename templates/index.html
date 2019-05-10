@@ -4,9 +4,9 @@
 
 {% if posts %}
     {% for post in posts %}
-        <article class= '{% if not post.active %}archived-{% endif %}blog-post'' >
+        <article class= '{% if not post.active %}archived-{% endif %}blog-post' >
             <span class='post-title'>
-                <a href = '/?id= {{post.id}}' class ='post-title' >{{ post.title }} </a>
+                <a href = '/?id={{post.id}}' class ='post-title' >{{ post.title }} </a>
             </span> 
             <span class='post-date'>{{ post.post_date }}</span><br>
             {% if not post.active %}<p>(this post is archived)</p>{% endif %}
