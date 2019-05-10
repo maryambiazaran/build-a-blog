@@ -1,30 +1,9 @@
-from flask import Flask, render_template, request, redirect, flash, url_for, session
-from flask_sqlalchemy import SQLAlchemy
+from app import app,db
+from models import Blog
+from flask import render_template, request, redirect, flash, url_for, session
 from datetime import datetime,timedelta
 
-app = Flask(__name__)
-app.config['DEBUG'] = True
-app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://build-a-blog:build-a-blog@localhost:8889/build-a-blog'
-app.config['SQLALCHEMY_ECHO'] = True
-app.secret_key = 'This_is_a_very_secret_key'
 
-db = SQLAlchemy(app)
-
-class Blog(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(120))
-    post_date = db.Column(db.DateTime, nullable=False, default=datetime.now())
-    body = db.Column(db.Text())
-    active = db.Column(db.Boolean)
-
-    def __init__(self,title):
-        self.title = title
-        self.date = datetime.now()
-        self.body = 'No content yet'
-        self.active = True
-
-    def __repr__(self):
-        return '< Title:"{}" ,date posted: {}>'.format(self.title,str(self.date)[:16])
 
 def get_active_posts():
     return Blog.query.filter_by(active=True).order_by(-Blog.id).all()
@@ -42,8 +21,19 @@ def index():
         db.session.commit()
         flash('The post is archived.')
         return redirect('/')
-
-    return render_template('index.html',posts=get_active_posts())
+    
+    blog_id = request.args.get('id')
+    try:
+        the_post = Blog.query.filter_by(id=int(blog_id)).first()
+        if the_post:
+            return render_template('index.html',posts=[the_post])
+        else:
+            flash('The requested blog does not exist.')
+            return redirect('/')
+    except TypeError:
+        return render_template('index.html',posts=get_active_posts())
+    
+    
 
 @app.route('/newpost', methods=['GET','POST'])
 def new_post():
@@ -57,7 +47,7 @@ def new_post():
             db.session.commit()
             print(new_post)
             flash('Your new blog is published.')
-            return render_template('index.html',posts=get_active_posts())
+            return render_template('index.html',posts=[new_post])
         else:
             flash('Your blog needs both "title" and some "text"')
             return render_template('newpost.html', title=title, body=body)
@@ -76,7 +66,7 @@ def archive():
         return redirect('/')
 
     else:
-        return render_template('archive.html',posts=get_inactive_posts())
+        return render_template('index.html',posts=get_inactive_posts())
 
 if __name__ == '__main__':
     app.run()

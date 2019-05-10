@@ -59,6 +59,22 @@ textarea {
     margin: 10px auto
 }
 
+.archived-blog-post {
+    width: 70vw;
+    background-color: #eeeded;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px auto;
+    color: rgba(0, 0, 0, 0.438)
+}
+.archived-blog-post p {
+    font-style: italic;
+    font-size: smaller;
+    line-height: 0;
+    color: maroon
+
+}
+
 .post-date {
     font-size: smaller;
     float: right;
@@ -71,7 +87,9 @@ textarea {
     float: left;
     font-size: large;
     font-weight: bold;
-    line-height: 1em
+    line-height: 1em;
+    Color: rgb(46, 46, 46);
+    text-decoration: None;
 
 }
 
